@@ -11,7 +11,7 @@ class ProfileList(generics.ListAPIView):
     No create view as profile creation is handled by django signals.
     """
     queryset = Profile.objects.annotate(
-    project_count=Count('owner__project', distinct=True),
+    project_count=Count('owner__project', distinct=True))
     serializer_class = ProfileSerializer
     filter_backends = [
         filters.OrderingFilter
@@ -22,13 +22,12 @@ class ProfileList(generics.ListAPIView):
 
 
 
-
 class ProfileDetail(generics.RetrieveUpdateAPIView):
     """
     Retrieve or update a profile if you're the owner.
     """
     permission_classes = [IsOwnerOrReadOnly]
     queryset = Profile.objects.annotate(
-    project_count=Count('owner__project', distinct=True),
+    project_count=Count('owner__project', distinct=True))
 
     serializer_class = ProfileSerializer
