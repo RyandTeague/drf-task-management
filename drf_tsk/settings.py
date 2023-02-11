@@ -33,7 +33,7 @@ SECRET_KEY = 'django-insecure-uy^r=r(pv8ktq_25o3_7y2m3)n=3kiei-j7ld99f=8m%42*@wh
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOST'), 'localhost', 'api-drf.herokuapp.com']
 
 
 # Application definition
@@ -81,6 +81,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'drf_tsk.wsgi.application'
 
+# CSRF 
+
+CSRF_TRUSTED_ORIGINS=['https://8000-ryandteague-drftaskmana-w88jnauyd4g.ws-us86.gitpod.io']
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
