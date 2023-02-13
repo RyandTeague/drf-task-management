@@ -1,7 +1,5 @@
-from rest_framework import serializers
-from .models import Todo
+from rest_framework import routers
+from .views import TodoViewset
 
-class TodoSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = Todo
-		fields = ('id', 'title', 'description', 'completed')
+router = routers.DefaultRouter()
+router.register('todo', TodoViewset)
