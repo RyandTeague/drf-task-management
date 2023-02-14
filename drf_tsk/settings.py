@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 if os.path.exists('env.py'):
     import env
+import dj_database_url
 
 CLOUDINARY_STORAGE = {
     'CLOUDINARY_URL': os.environ.get('CLOUDINARY_URL')
@@ -28,12 +29,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-uy^r=r(pv8ktq_25o3_7y2m3)n=3kiei-j7ld99f=8m%42*@wh'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = 'DEV' in os.environ
 
-ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOST'), 'localhost', 'api-drf.herokuapp.com']
+ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOST'), 'localhost', 'https://task-backend.herokuapp.com']
 
 
 # Application definition
@@ -56,7 +57,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'dj_rest_auth.registration',
-#    'corsheaders',
+    'corsheaders',
 
     'profiles',
     'todos',
@@ -83,6 +84,7 @@ JWT_AUTH_SAMESITE = 'None'
 REST_AUTH_SERIALIZERS = {'USER_DETAILS_SERIALIZER': 'drf_tsk.serializers.CurrentUserSerializer'}
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -91,6 +93,18 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+
+if 'CLIENT_ORIGIN_DEV' in os.environ:
+    extracted_url = re.match(r'^.+-', os.environ.get('CLIENT_ORIGIN_DEV', ''),
+re.IGNORECASE).group(0)
+    CORS_ALLOWED_ORIGIN_REGEXES = [
+        rf"{extracted_url}(eu|us)\d+\w\.gitpod\.io$",
+    ]
+
+CORS_ALLOW_CREDENTIALS = True
+
+JWT_AUTH_SAMESITE = 'None'
 
 ROOT_URLCONF = 'drf_tsk.urls'
 
@@ -120,11 +134,14 @@ CSRF_TRUSTED_ORIGINS=['https://8000-ryandteague-drftaskmana-w88jnauyd4g.ws-us86.
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+    'default': ({
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    } if 'DEV' in os.environ else dj_database_url.parse(
+        os.environ.get('DATABASE_URL')
+    ))
 }
+
 
 
 # Password validation
