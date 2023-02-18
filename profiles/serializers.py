@@ -13,7 +13,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = [
-            'id', 'owner', 'created_at', 'updated_at', 'name',
-            'content', 'image', 'is_owner', 'following_id',
+            'id', 'owner','first_name', 'last_name', 'created_at', 'updated_at', 'name',
+            'bio', 'image', 'is_owner', 'following_id',
             'posts_count', 'followers_count', 'following_count',
         ]
