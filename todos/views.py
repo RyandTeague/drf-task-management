@@ -1,5 +1,5 @@
 from rest_framework import generics, permissions
-#from drf_tsk.permissions import IsOwnerOrReadOnly
+#python3 manage.pyfrom drf_tsk.permissions import IsOwnerOrReadOnly
 from .models import Todo
 from .serializers import ToDoSerializer
 
