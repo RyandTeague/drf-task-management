@@ -1,6 +1,7 @@
 from django.urls import path
-from todos import views
+from .views import TodoListCreateView, TodoRetrieveUpdateDestroyView
 
 urlpatterns = [
-    path('todo/', views.Todo.as_view()),
+    path('todos/', TodoListCreateView.as_view(), name='todo-list-create'),
+    path('todos/<int:pk>/', TodoRetrieveUpdateDestroyView.as_view(), name='todo-retrieve-update-destroy'),
 ]

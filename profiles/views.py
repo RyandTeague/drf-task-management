@@ -1,22 +1,17 @@
 from rest_framework import generics
-from drf_tsk.permissions import IsOwnerOrReadOnly
 from .models import Profile
 from .serializers import ProfileSerializer
+from rest_framework.permissions import IsAuthenticated
 
-
-class ProfileList(generics.ListAPIView):
-    """
-    List all profiles.
-    No create view as profile creation is handled by django signals.
-    """
+class ProfileListCreateView(generics.ListCreateAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
+    permission_classes = [IsAuthenticated]
 
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
-class ProfileDetail(generics.RetrieveUpdateAPIView):
-    """
-    Retrieve or update a profile if you're the owner.
-    """
-    permission_classes = [IsOwnerOrReadOnly]
+class ProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
+    permission_classes = [IsAuthenticated]

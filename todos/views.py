@@ -1,12 +1,23 @@
 from rest_framework import generics, permissions
-#python3 manage.pyfrom drf_tsk.permissions import IsOwnerOrReadOnly
 from .models import Todo
-from .serializers import ToDoSerializer
+from .serializers import TodoSerializer
 
-class Todo(generics.ListAPIView):
-#    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+class TodoListCreateView(generics.ListCreateAPIView):
     queryset = Todo.objects.all()
-    serializer_class = ToDoSerializer
+    serializer_class = TodoSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+
+class TodoRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Todo.objects.all()
+    serializer_class = TodoSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_update(self, serializer):
+        todo = serializer.instance
+        if self.request.user == todo.owner or self.request.user == todo.assigned_to:
+            serializer.save()
+        else:
+            raise permissions.PermissionDenied()

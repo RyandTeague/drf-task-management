@@ -1,10 +1,11 @@
 from rest_framework import serializers
+from django.contrib.auth.models import User
 from .models import Profile
 
 class ProfileSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     is_owner = serializers.SerializerMethodField()
-    posts_count = serializers.ReadOnlyField()
+    friends = serializers.StringRelatedField(many=True)
 
     def get_is_owner(self, obj):
         request = self.context['request']
@@ -12,8 +13,5 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = [
-            'id', 'owner','first_name', 'last_name', 'created_at', 'updated_at', 'name',
-            'bio', 'image', 'is_owner', 'following_id',
-            'posts_count', 'followers_count', 'following_count',
-        ]
+        fields = ['id', 'owner', 'is_owner', 'friends', 'first_name', 'last_name', 'created_at', 'updated_at', 'name', 'bio', 'image']
+        read_only_fields = ['id', 'created_at', 'updated_at']
