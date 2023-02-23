@@ -7,6 +7,7 @@ class Profile(models.Model):
     friends = models.ManyToManyField('self', symmetrical=False)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
+    email = models.EmailField(max_length=255, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     name = models.CharField(max_length=255, blank=True)
@@ -24,7 +25,7 @@ class Profile(models.Model):
 
 def create_profile(sender, instance, created, **kwargs):
     if created:
-        Profile.objects.create(owner=instance)
+        Profile.objects.create(owner=instance, email=instance.email)
 
 
 post_save.connect(create_profile, sender=User)
