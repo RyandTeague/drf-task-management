@@ -1,7 +1,7 @@
 from rest_framework import generics
 from .models import Todo
 from .serializers import TodoSerializer
-from drf_api.permissions import IsOwnerOrReadOnly
+from drf_tsk.permissions import IsOwnerOrReadOnly
 
 class TodoListCreateView(generics.ListCreateAPIView):
     queryset = Todo.objects.all()
