@@ -9,12 +9,12 @@ class Todo(models.Model):
     deadline = models.DateTimeField(null=True, blank=True)
     completed = models.BooleanField(default=False)
     assigned_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name='assigned_tasks', default=1)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     overdue = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ['-created']
 
     def __str__(self):
         return f'{self.id} {self.title}'

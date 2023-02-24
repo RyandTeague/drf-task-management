@@ -8,7 +8,7 @@ class Profile(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField(max_length=255, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     name = models.CharField(max_length=255, blank=True)
     bio = models.TextField(blank=True)
@@ -17,7 +17,7 @@ class Profile(models.Model):
     )
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ['-created']
 
     def __str__(self):
         return f"{self.first_name}'s profile"
