@@ -5,8 +5,8 @@ from django.contrib.auth.models import User
 class Profile(models.Model):
     owner = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     friends = models.ManyToManyField('self', symmetrical=False)
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
+    first_name = models.CharField(max_length=50, blank=True)
+    last_name = models.CharField(max_length=50, blank=True)
     email = models.EmailField(max_length=255, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
