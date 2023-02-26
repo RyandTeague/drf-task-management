@@ -96,6 +96,7 @@ INSTALLED_APPS = [
 
     'profiles',
     'todos',
+    'followers'
 ]
 
 SITE_ID = 1

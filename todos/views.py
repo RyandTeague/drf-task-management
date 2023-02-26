@@ -3,7 +3,7 @@ from .serializers import TodoSerializer
 from django.db.models import Count
 from rest_framework import generics, permissions, filters
 from django_filters.rest_framework import DjangoFilterBackend
-from drf_api.permissions import IsOwnerOrReadOnly
+from drf_tsk.permissions import IsOwnerOrReadOnly
 
 class TodoList(generics.ListCreateAPIView):
     queryset = Todo.objects.all().order_by('-created_at')
@@ -30,8 +30,8 @@ class TodoList(generics.ListCreateAPIView):
         serializer.save(owner=self.request.user)
 
 
-class ToDoDetail(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = ToDoSerializer
+class TodoDetail(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = TodoSerializer
     permission_classes = [IsOwnerOrReadOnly]
     queryset = Todo.objects.all().order_by('-created_at')
 """
