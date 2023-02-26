@@ -114,9 +114,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ALLOW_CREDENTIALS = True
-JWT_AUTH_SAMESITE = 'None'
-
 ROOT_URLCONF = 'drf_tsk.urls'
 
 TEMPLATES = [
@@ -136,10 +133,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'drf_tsk.wsgi.application'
-
-# CSRF
-
-CSRF_TRUSTED_ORIGINS=['https://8000-ryandteague-drftaskmana-w88jnauyd4g.ws-us86.gitpod.io']
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -189,7 +182,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
