@@ -13,6 +13,7 @@ urlpatterns = [
     ),
     path('', include('profiles.urls')),
     path('', include('todos.urls')),
-    path('', include('followers.urls'))
+    path('', include('followers.urls')),
+    path('', include('groups.urls'))
 
 ]
