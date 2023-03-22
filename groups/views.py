@@ -7,8 +7,8 @@ from .serializers import GroupSerializer
 class GroupList(generics.CreateAPIView):
     serializer_class = GroupSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    queryset = Todo.objects.all().order_by('-created_at')
-    
+    queryset = Group.objects.all().order_by('-created_at')
+
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
