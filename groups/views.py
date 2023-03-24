@@ -8,7 +8,7 @@ class GroupList(generics.CreateAPIView):
     serializer_class = GroupSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     queryset = Group.objects.all().order_by('-created_at')
-
+    allowed_methods = None
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
