@@ -17,6 +17,6 @@ class GroupDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = GroupSerializer
     queryset = Group.objects.all()
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
+    allowed_methods = None
     def get_queryset(self):
         return self.queryset.filter(owner=self.request.user)
