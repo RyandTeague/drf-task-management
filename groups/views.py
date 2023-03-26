@@ -2,6 +2,7 @@ from rest_framework import generics, permissions
 
 from .models import Group
 from .serializers import GroupSerializer
+from drf_tsk.permissions import IsOwnerOrReadOnly
 
 
 class GroupList(generics.CreateAPIView):
@@ -16,7 +17,7 @@ class GroupList(generics.CreateAPIView):
 class GroupDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = GroupSerializer
     queryset = Group.objects.all()
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [IsOwnerOrReadOnly]
     allowed_methods = ['GET', 'PUT', 'POST', 'PATCH', 'DELETE']
     def get_queryset(self):
         return self.queryset.filter(owner=self.request.user)

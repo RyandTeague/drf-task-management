@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
-from .views import root_route, logout_route
+from .views import root_route, logout_route, getcookie
 
 urlpatterns = [
     path('', root_route),
@@ -14,6 +14,7 @@ urlpatterns = [
     path('', include('profiles.urls')),
     path('', include('todos.urls')),
     path('', include('followers.urls')),
-    path('', include('groups.urls'))
+    path('', include('groups.urls')),
+    path('getcookie/', getcookie),  
 
 ]

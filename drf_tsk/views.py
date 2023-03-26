@@ -4,13 +4,20 @@ from .settings import (
     JWT_AUTH_COOKIE, JWT_AUTH_REFRESH_COOKIE, JWT_AUTH_SAMESITE,
     JWT_AUTH_SECURE,
 )
+from django.http import HttpResponse
 
 
 @api_view()
 def root_route(request):
     return Response({
+        
         "message": "Welcome to my drf API!"
     })
+
+def getcookie(request):  
+    show = request.COOKIES['sessionid']  
+    # html = "<center> New Page <br>{0}</center>".format(show)  
+    return HttpResponse(show)  
 
 
 # dj-rest-auth logout view fix
