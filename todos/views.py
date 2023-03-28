@@ -8,7 +8,7 @@ from drf_tsk.permissions import IsOwnerOrReadOnly
 class TodoList(generics.ListCreateAPIView):
     queryset = Todo.objects.all().order_by('-created_at')
     serializer_class = TodoSerializer
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     filter_backends = [
         filters.OrderingFilter,
         filters.SearchFilter,
