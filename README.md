@@ -1,5 +1,4 @@
-![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
-
+# Task Management django rest framework
 
 ## Libraries
 Libraries dependancies:
@@ -21,3 +20,11 @@ Libraries dependancies:
 15. "react-router-dom": "^5.3.0": React Router is a popular library for managing navigation in a React application.
 16. "react-scripts": "^4.0.3": React Scripts is a set of scripts and configuration used by Create React App to build, test, and run a React application.
 17. "web-vitals": "^1.1.2": This library provides tools for measuring and analyzing web performance metrics.
+
+## Deployment
+
+- The site was deployed using Code Institute's mock terminal for Heorku. The steps to deploy are as follows
+    - Create a new Heroku App
+    - Link the heroku app to a PostgreSQL database hosted on heroku
+    - Link the heroku app to the repository
+    - Click on Deploy
