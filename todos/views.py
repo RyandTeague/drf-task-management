@@ -1,5 +1,5 @@
-from .models import Todo, Project
-from .serializers import TodoSerializer, ProjectSerializer
+from .models import Todo
+from .serializers import TodoSerializer
 from django.db.models import Count
 from rest_framework import generics, permissions, filters
 from django_filters.rest_framework import DjangoFilterBackend
@@ -16,12 +16,12 @@ class TodoList(generics.ListCreateAPIView):
     ]
     filterset_fields = [
         'owner__profile',
-        'project'
+    #    'project'
     ]
     search_fields = [
         'owner__username',
         'title',
-        'project',
+    #    'project',
     ]
     ordering_fields = [
         'deadline',
@@ -45,7 +45,7 @@ class TodoDetail(generics.RetrieveUpdateDestroyAPIView):
         else:
             raise permissions.PermissionDenied()
             """
-
+"""
 class ProjectList(generics.ListCreateAPIView):
     queryset = Project.objects.all().order_by('-created_at')
     serializer_class = ProjectSerializer
@@ -74,3 +74,4 @@ class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProjectSerializer
     permission_classes = [IsOwnerOrReadOnly]
     queryset = Project.objects.all().order_by('-created_at')
+"""

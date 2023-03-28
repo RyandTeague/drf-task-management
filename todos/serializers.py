@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from todos.models import Todo, Project
+from todos.models import Todo
 
 
 class TodoSerializer(serializers.ModelSerializer):
@@ -18,9 +18,10 @@ class TodoSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'owner', 'is_owner', 'profile_id',
             'profile_image', 'created_at', 'updated_at',
-            'title', 'content', 'deadline', 'completed',  'project',
+            'title', 'content', 'deadline', 'completed',
         ]
 
+"""
 class ProjectSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     is_owner = serializers.SerializerMethodField()
@@ -39,3 +40,4 @@ class ProjectSerializer(serializers.ModelSerializer):
             'id', 'owner', 'is_owner', 'profile_id', 'profile_image',
             'created_at', 'updated_at', 'title', 'deadline', 'todos'
         ]
+"""
