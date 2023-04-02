@@ -10,7 +10,7 @@ class Group(models.Model):
     members = models.ManyToManyField(User, related_name='group_member')
     created_at = models.DateTimeField(auto_now_add=True)
     class Meta:
-        ordering = ['name']
+        ordering = ['-id']
 
     def __str__(self):
         return f'{self.owner} {self.name}'

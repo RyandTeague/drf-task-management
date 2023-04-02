@@ -17,20 +17,27 @@ if os.path.exists('env.py'):
 import dj_database_url
 import re
 
-CLOUDINARY_STORAGE = {
-    'CLOUDINARY_URL': os.environ.get('CLOUDINARY_URL')
-}
-MEDIA_URL = '/media/'
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+
+# CLOUDINARY_STORAGE = {
+#     'CLOUDINARY_URL': os.environ.get('CLOUDINARY_URL')
+# }
+# MEDIA_URL = '/media/'
+# DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [(
-        'rest_framework.authentication.SessionAuthentication'
-        if 'DEV' in os.environ
-        else 'dj_rest_auth.jwt_auth.JWTCookieAuthentication'
-    )],
+    # 'DEFAULT_AUTHENTICATION_CLASSES': [(
+    #     'rest_framework.authentication.SessionAuthentication'
+    #     if 'DEV' in os.environ
+    #     else 'dj_rest_auth.jwt_auth.JWTCookieAuthentication'
+    # )],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
     'DEFAULT_PAGINATION_CLASS':
         'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
@@ -116,6 +123,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_currentuser.middleware.ThreadLocalUserMiddleware',
 ]
 
 ROOT_URLCONF = 'drf_tsk.urls'
@@ -142,7 +150,7 @@ WSGI_APPLICATION = 'drf_tsk.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 if 'DEV' in os.environ:
-     DATABASES = {
+    DATABASES = {
          'default': {
              'ENGINE': 'django.db.backends.sqlite3',
              'NAME': BASE_DIR / 'db.sqlite3',
@@ -194,3 +202,4 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+

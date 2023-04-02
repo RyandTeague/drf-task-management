@@ -1,9 +1,13 @@
 from django.db.models import Count
 from rest_framework import generics, filters
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.permissions import IsAuthenticated
+
 from drf_tsk.permissions import IsOwnerOrReadOnly
 from .models import Profile
 from .serializers import ProfileSerializer
+
+
 
 
 class ProfileList(generics.ListAPIView):
@@ -11,6 +15,7 @@ class ProfileList(generics.ListAPIView):
     List all profiles.
     No create view as profile creation is handled by django signals.
     """
+    permission_classes = [IsAuthenticated]
     queryset = Profile.objects.annotate(
         todo_count=Count('owner__todo', distinct=True),
         followers_count=Count('owner__followed', distinct=True),
@@ -38,7 +43,7 @@ class ProfileDetail(generics.RetrieveUpdateAPIView):
     """
     Retrieve or update a profile if you're the owner.
     """
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
     queryset = Profile.objects.annotate(
         todos_count=Count('owner__todo', distinct=True),
         followers_count=Count('owner__followed', distinct=True),

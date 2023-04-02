@@ -14,8 +14,10 @@ def root_route(request):
         "message": "Welcome to my drf API!"
     })
 
-def getcookie(request):  
-    show = request.COOKIES['sessionid']  
+def getcookie(request):
+    print('cookies: ', request.COOKIES)
+    # show = request.COOKIES['sessionid']
+    show = request.COOKIES.get('sessionid')
     # html = "<center> New Page <br>{0}</center>".format(show)  
     return HttpResponse(show)  
 

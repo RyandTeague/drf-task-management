@@ -11,10 +11,10 @@ urlpatterns = [
     path(
         'dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')
     ),
+    path('', include('groups.urls')),
     path('', include('profiles.urls')),
     path('', include('todos.urls')),
     path('', include('followers.urls')),
-    path('', include('groups.urls')),
     path('getcookie/', getcookie),  
 
 ]

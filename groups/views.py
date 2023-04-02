@@ -1,38 +1,93 @@
-from django.db.models import Q
-
-from rest_framework import generics, permissions
-from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from django.db.models import Q
+from django.contrib.auth.models import User
 
-from .models import Group
-from .serializers import GroupSerializer
 from drf_tsk.permissions import IsOwnerOrReadOnly
+from .models import Group
+from .serializers import GroupSerializer, GroupListSerializer
+
+from drf_tsk.serializers import UserSerializer
+
+from commons.utils import get_paginated_response
 
 
-class GroupList(generics.CreateAPIView):
-    serializer_class = GroupSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    queryset = Group.objects.all().order_by('-created_at')
-    allowed_methods = ['GET', 'PUT', 'POST', 'PATCH', 'DELETE']
+class GroupListCreateAPIView(APIView):
+	permission_classes = [IsAuthenticated]
 
-    def get(self, request, *args, **kwargs):
-        """Return a list of groups owned by the current user."""
-        if request.user.is_anonymous:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        groups = self.get_queryset().filter(
-            Q(owner=request.user) | Q(members=request.user)
-        ).distinct()
-        serializer = self.get_serializer(groups, many=True)
-        return Response(serializer.data)
+	def post(self, request, format=None):
+		data = request.data
+		data['owner'] = request.user.id
+		serializer = GroupSerializer(data=data)
+		if serializer.is_valid():
+			serializer.save()
+		else:
+			return Response({'errors': serializer.errors, 'message': "Group create failed"}, status=status.HTTP_400_BAD_REQUEST)
+		return Response({'data': serializer.data, 'message': "Group created successfully"}, status=status.HTTP_201_CREATED)
 
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+	def get(self, request, format=None):
+		groups = Group.objects.filter(Q(owner=request.user)|Q(members=request.user)).distinct()
+		response = get_paginated_response(request, groups, GroupListSerializer)
+		# print('response: ', response)
+		return Response(response, status=status.HTTP_200_OK)
 
 
-class GroupDetail(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = GroupSerializer
-    queryset = Group.objects.all()
-    permission_classes = [IsOwnerOrReadOnly]
-    allowed_methods = ['GET', 'PUT', 'POST', 'PATCH', 'DELETE']
-    def get_queryset(self):
-        return self.queryset.filter(owner=self.request.user)
+class GroupRetrieveUpdateDestroyAPIView(APIView):
+	permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+
+	def get(self, request, pk, format=None):
+		try:
+			group = Group.objects.get(pk=pk)
+			serializer = GroupListSerializer(group, context={'request': request})
+			return Response({'data': serializer.data}, status=status.HTTP_200_OK)
+		except Group.DoesNotExist:
+			return Response({'message': "Requested status doesn't exist"}, status=status.HTTP_400_BAD_REQUEST)
+
+	def put(self, request, pk, format=None):
+		try:
+			group = Group.objects.get(pk=pk)
+			serializer = GroupSerializer(group, data=request.data)
+			if serializer.is_valid():
+				serializer.save()
+			else:
+				return Response({'errors': serializer.errors, 'message': "Group update failed"}, status=status.HTTP_400_BAD_REQUEST)
+			return Response({'data': serializer.data, 'message': "Group updated successfully"}, status=status.HTTP_200_OK)
+		except Group.DoesNotExist:
+			return Response({'message': "Requested status doesn't exist"}, status=status.HTTP_400_BAD_REQUEST)
+
+	def patch(self, request, pk, format=None):
+		try:
+			data = request.data
+			print('data: ', data)
+			group = Group.objects.get(pk=pk)
+			serializer = GroupSerializer(group, data=request.data, partial=True)
+			if serializer.is_valid():
+				serializer.save()
+			else:
+				return Response({'errors': serializer.errors, 'message': "Group update failed"}, status=status.HTTP_400_BAD_REQUEST)
+			return Response({'data': serializer.data, 'message': "Group updated successfully"}, status=status.HTTP_200_OK)
+		except Group.DoesNotExist:
+			return Response({'message': "Requested status doesn't exist"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+	def delete(self, request, pk, format=None):
+		try:
+			group = Group.objects.get(pk=pk)
+			group.delete()
+			return Response({'message': "Group deleted successfully"}, status=status.HTTP_200_OK)
+		except Group.DoesNotExist:
+			return Response({'message': "Requested status doesn't exist"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+class UserListAPIView(APIView):
+	permission_classes = [IsAuthenticated]
+
+	def get(self, request, format=None):
+		users = User.objects.all()
+
+		serializer = UserSerializer(users, many=True)
+		return Response({'data': serializer.data}, status=status.HTTP_200_OK)

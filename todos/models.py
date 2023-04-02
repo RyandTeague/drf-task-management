@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime
+
 """
 class Project(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
@@ -15,6 +16,8 @@ class Project(models.Model):
     def __str__(self):
         return f'{self.id} {self.title}'
 """
+
+
 class Todo(models.Model):
     deadline = models.DateTimeField(null=True, blank=True)
     completed = models.BooleanField(default=False)
@@ -27,7 +30,7 @@ class Todo(models.Model):
 
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ['-id']
 
     def __str__(self):
         return f'{self.id} {self.title}'
