@@ -16,9 +16,7 @@ def root_route(request):
 
 def getcookie(request):
     print('cookies: ', request.COOKIES)
-    # show = request.COOKIES['sessionid']
     show = request.COOKIES.get('sessionid')
-    # html = "<center> New Page <br>{0}</center>".format(show)  
     return HttpResponse(show)  
 
 

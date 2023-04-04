@@ -30,7 +30,7 @@ class GroupListCreateAPIView(APIView):
 	def get(self, request, format=None):
 		groups = Group.objects.filter(Q(owner=request.user)|Q(members=request.user)).distinct()
 		response = get_paginated_response(request, groups, GroupListSerializer)
-		# print('response: ', response)
+		print('response: ', response)
 		return Response(response, status=status.HTTP_200_OK)
 
 
